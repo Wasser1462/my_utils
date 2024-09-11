@@ -1,8 +1,8 @@
 import os
 import subprocess
 
-input_folder = "/data1/zengyongwang/oupai/mp3"
-output_folder = "/data1/zengyongwang/oupai/wav2"
+input_folder = "/data1/zengyongwang/dataset/zhinengkefu/mp3"
+output_folder = "/data1/zengyongwang/dataset/zhinengkefu/wav"
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)

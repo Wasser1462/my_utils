@@ -5,6 +5,7 @@ import re
 import logging
 from pathlib import Path
 import shutil  # 用于复制文件夹
+import json
 
 def get_wav_scp_and_text(folder_path):
     wav_scp_path = os.path.join(folder_path, 'wav.scp')
@@ -141,17 +142,26 @@ def generate_data_list(wav_scp, text, output_dir):
     data_list_path = os.path.join(output_dir, "data.list")
 
     with open(wav_scp, 'r', encoding="utf-8") as wav_file, open(data_list_path, 'w', encoding="utf-8") as data_list:
+        missing_count = 0  # 记录未匹配的数量
+        total_count = 0  # 记录总的条目数量
         for line in wav_file:
             utterance_id, wav_path = line.strip().split(" ", 1)
+            total_count += 1
             if utterance_id in text_dict:
+                # 使用 json.dumps 确保输出为双引号 JSON 格式，并避免中文转义
                 entry = {
                     "key": utterance_id,
                     "wav": wav_path,
                     "txt": text_dict[utterance_id]
                 }
-                data_list.write(f"{entry}\n")
-    
-    print(f"已生成 {data_list_path}")
+                data_list.write(json.dumps(entry, ensure_ascii=False) + "\n")
+            else:
+                missing_count += 1
+                logging.warning(f"未找到匹配的文本: {utterance_id}")
+        
+        print(f"总条目数: {total_count}, 未匹配条目数: {missing_count}")
+        print(f"已生成 {data_list_path} 文件")
+
 
 def generate_new_wav_scp_and_text(wav_folder_0, wav_folder_1, output_dir, tolerance_seconds=100):
     wav_scp_0, text_0 = get_wav_scp_and_text(wav_folder_0)

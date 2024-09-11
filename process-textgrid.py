@@ -6,26 +6,22 @@ from pydub import AudioSegment
 def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
     print(f"Processing TextGrid: {textgrid_path}")
     
-    # 读取 TextGrid 文件
     try:
         tg = TextGrid.fromFile(textgrid_path)
     except Exception as e:
         print(f"Error reading TextGrid file {textgrid_path}: {e}")
         stats['failed'] += 1
         return
-    
-    # 提取文件名
+
     wav_filename = os.path.basename(textgrid_path).replace(".TextGrid", ".wav")
     wav_filepath = os.path.join(wav_dir, wav_filename)
     print(f"Corresponding WAV file: {wav_filepath}")
     
-    # 确保对应的 WAV 文件存在
     if not os.path.exists(wav_filepath):
         print(f"WAV file not found for: {textgrid_path}")
         stats['failed'] += 1
         return
     
-    # 加载 WAV 文件
     try:
         audio = AudioSegment.from_wav(wav_filepath)
     except Exception as e:
@@ -33,7 +29,6 @@ def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
         stats['failed'] += 1
         return
     
-    # 查找名为 "内容层" 的层
     tier = None
     for t in tg.tiers:
         if t.name == "内容层":
@@ -51,7 +46,6 @@ def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
     text_lines = []
     segment_count = 0  # 记录成功处理的片段数量
 
-    # 处理每个标注段，只提取有内容的段落
     for interval in tier.intervals:
         if interval.mark.strip():  # 如果 text 不为空
             start_time = interval.minTime * 1000  # 转为毫秒
@@ -101,7 +95,7 @@ def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
     print("Processing complete for: ", textgrid_path)
 
 def main():
-    # 使用 argparse 解析传入的路径参数
+
     parser = argparse.ArgumentParser(description="Process TextGrid and WAV files for ASR task.")
     parser.add_argument('textgrid_dir', type=str, help="Directory containing TextGrid files")
     parser.add_argument('wav_dir', type=str, help="Directory containing WAV files")
@@ -111,16 +105,13 @@ def main():
 
     print(f"Starting to process TextGrid files from: {args.textgrid_dir}")
     
-    # 创建输出文件夹
     os.makedirs(os.path.join(args.output_dir, "wav"), exist_ok=True)
     
-    # 统计成功和失败的处理数量
     stats = {
         'successful': 0,
         'failed': 0
     }
 
-    # 处理所有 TextGrid 文件
     for textgrid_file in os.listdir(args.textgrid_dir):
         if textgrid_file.endswith(".TextGrid"):
             textgrid_path = os.path.join(args.textgrid_dir, textgrid_file)
