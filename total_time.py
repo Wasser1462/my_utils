@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: 根据wav.scp文件，统计音频时长
+
 import logging
 
 logging.basicConfig(level=logging.INFO)

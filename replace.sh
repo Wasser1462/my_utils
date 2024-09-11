@@ -1,4 +1,7 @@
 #!/bin/bash
+# Author: zyw
+# Date: 2024-09-11
+# Description: 
 
 source_dir="/data1/zengyongwang/oupai/vad-result/vad_segments"
 target_dir="/data1/zengyongwang/oupai/wav-test-train/train/wav"

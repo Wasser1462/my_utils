@@ -1,4 +1,7 @@
 #!/bin/bash
+# Author: zyw
+# Date: 2024-09-11
+# Description: 
 
 # 定义源文件夹和目标文件夹
 source_dir="/data1/zengyongwang/oupai/wav2"

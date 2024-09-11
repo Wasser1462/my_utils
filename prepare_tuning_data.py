@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: This script is used to prepare tuning data for the ASR model.
+
 import argparse
 import os
 import random

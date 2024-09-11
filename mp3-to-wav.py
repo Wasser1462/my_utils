@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: Convert all mp3 files in a folder to wav format using ffmpeg
+
 import os
 import subprocess
 

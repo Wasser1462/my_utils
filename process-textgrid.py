@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: Process TextGrid files and WAV files, extract information and save for ASR task.
+
 import os
 import argparse
 from textgrid import TextGrid

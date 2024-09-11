@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: 提取TextGrid文件中的文本内容，并保存到指定文件中
+
 import os
 import re
 

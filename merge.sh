@@ -1,4 +1,7 @@
 #!/bin/bash
+# Author: zyw
+# Date: 2024-09-11
+# Description: 
 
 SOURCE_DIR1="/data1/zengyongwang/oupai/wav-channels/part1"
 SOURCE_DIR2="/data1/zengyongwang/oupai/wav-channels/part2"

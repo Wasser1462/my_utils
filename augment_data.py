@@ -1,3 +1,6 @@
+# Author: zyw
+# Date: 2024-09-10
+# Description: 
 import os
 import json
 import argparse
@@ -6,16 +9,10 @@ import numpy as np
 import shutil
 from multiprocessing import Pool
 import logging
+from check_train_data import check_data_consistency
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
 logger = logging.getLogger(__name__)
-
-
-def check_data_consistency(wav_scp_lines, text_lines, data_list_lines):
-    if len(wav_scp_lines) != len(text_lines) or len(wav_scp_lines) != len(data_list_lines):
-        print("警告:wav.scp, text, data.list 文件的行数不一致。请检查输入文件。")
-    else:
-        print("数据一致性检查通过。")
 
 def add_noise(audio_segment, noise_factor=0.02):
     samples = np.array(audio_segment.get_array_of_samples())

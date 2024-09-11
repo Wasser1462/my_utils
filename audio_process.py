@@ -1,3 +1,6 @@
+# Author: zyw
+# Date: 2024-09-11
+# Description: 利用ffmpg进行双声道分离
 import os
 import subprocess
 from argparse import ArgumentParser

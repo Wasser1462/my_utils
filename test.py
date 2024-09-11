@@ -1,33 +1,23 @@
+# Author: zyw
+# Date: 2024-09-01
+# Description: test
+from augment_data import check_data_consistency
 import os
-import json
-import argparse
-from pydub import AudioSegment
-import numpy as np
-import shutil
-from multiprocessing import pool
 import logging
 
-logging.basicConfig(level=logging.INFO,format='%(asctime)s %(name)s %(levelname)s ')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-def check_data_consistency(wav_scp_lines, text_lines, data_list_lines):
-    if len(wav_scp_lines) != len(text_lines) or len(wav_scp_lines) != len(data_list_lines):
-        logger.error('Data length is not consistent!')
-        return False
-    return True
-    
-def copy_dev_folder(source_dir, output_dir):
-    dev_folder = os.path.join(source_dir, 'dev')
-    des_folder = os.path.join(output_dir, 'dev')
-    if os.path.exists(dev_folder):
-        shutil.copytree(dev_folder, des_folder)
-        logging.info('dev folder copied successfully!')
-    else:
-        logger.error('No dev folder found in the source directory!')
-        
-def add_noise(audio_segment,noise_factor=0.02):
-    sample = np.array(audio_segment.get_array_of_samples())
-    noise = np.random.randn(0, 1, len(sample))
-    augmented_sample = sample + noise_factor * noise*np.max(np.abs(sample))
-    augmented_audio = audio_segment.from_array(augmented_sample) 
-    return augmented_audio   
+if __name__ == '__main__':
+    input_dir = '/data1/zengyongwang/dataset/output/train'
+    wav_scp_path = os.path.join(input_dir, 'wav.scp')
+    text_path = os.path.join(input_dir, 'text')
+    data_list_path = os.path.join(input_dir, 'data.list')
+
+    with open(wav_scp_path, 'r') as wav_scp_file, open(text_path, 'r') as text_file, open(data_list_path, 'r') as data_list_file:
+        wav_scp_lines = wav_scp_file.readlines()
+        text_lines = text_file.readlines()
+        data_list_lines = data_list_file.readlines()
+        check_data_consistency(wav_scp_lines, text_lines, data_list_lines)
+        logger.info('Data consistency check passed.')
+    logger.info('Test completed.')
