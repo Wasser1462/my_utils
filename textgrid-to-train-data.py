@@ -4,6 +4,7 @@
 
 import os
 import argparse
+import json  
 from textgrid import TextGrid
 from pydub import AudioSegment
 
@@ -83,10 +84,10 @@ def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
         print(f"Writing wav.scp and text files...")
 
         try:
-            with open(wav_scp_path, "a") as wav_scp_file:
+            with open(wav_scp_path, "a", encoding='utf-8') as wav_scp_file:
                 wav_scp_file.write("\n".join(wav_scp_lines) + "\n")
 
-            with open(text_path, "a") as text_file:
+            with open(text_path, "a", encoding='utf-8') as text_file:
                 text_file.write("\n".join(text_lines) + "\n")
             
             stats['successful'] += 1
@@ -98,12 +99,49 @@ def process_textgrid_and_wav(textgrid_path, wav_dir, output_dir, stats):
 
     print("Processing complete for: ", textgrid_path)
 
+def read_scp(scp_file):
+    scp_data = {}
+    with open(scp_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            parts = line.strip().split()
+            if len(parts) != 2:
+                continue
+            key, path = parts
+            scp_data[key] = path
+    return scp_data
+
+def read_text(text_file):
+    text_data = {}
+    with open(text_file, 'r', encoding='utf-8') as f:
+        for line in f:
+            parts = line.strip().split(maxsplit=1)
+            if len(parts) != 2:
+                continue
+            key, text = parts
+            text_data[key] = text
+    return text_data
+
+def generate_data_list(wav_scp, text, output_file):
+    data_list = []
+    for key in wav_scp:
+        if key in text:
+            new_data_entry = {
+                "key": key,
+                "wav": wav_scp[key],
+                "txt": text[key]
+            }
+            data_list.append(new_data_entry)
+    
+    with open(output_file, 'w', encoding='utf-8') as f:
+        for entry in data_list:
+            f.write(json.dumps(entry, ensure_ascii=False) + '\n')
+
 def main():
 
-    parser = argparse.ArgumentParser(description="Process TextGrid and WAV files for ASR task.")
+    parser = argparse.ArgumentParser(description="Process TextGrid and WAV files for ASR task ")
     parser.add_argument('textgrid_dir', type=str, help="Directory containing TextGrid files")
     parser.add_argument('wav_dir', type=str, help="Directory containing WAV files")
-    parser.add_argument('output_dir', type=str, help="Output directory for processed files (wav.scp, text)")
+    parser.add_argument('output_dir', type=str, help="Output directory for processed files (wav.scp, text, data.list)")
     
     args = parser.parse_args()
 
@@ -122,6 +160,21 @@ def main():
             process_textgrid_and_wav(textgrid_path, args.wav_dir, args.output_dir, stats)
 
     print(f"Processing complete. Successful: {stats['successful']}, Failed: {stats['failed']}")
+
+    # 生成 data.list
+    print("Generating data.list...")
+
+    wav_scp_path = os.path.join(args.output_dir, "wav.scp")
+    text_path = os.path.join(args.output_dir, "text")
+    data_list_path = os.path.join(args.output_dir, "data.list")
+
+    if not os.path.exists(wav_scp_path) or not os.path.exists(text_path):
+        print(f"Error: wav.scp or text file not found in {args.output_dir}")
+    else:
+        wav_scp = read_scp(wav_scp_path)
+        text = read_text(text_path)
+        generate_data_list(wav_scp, text, data_list_path)
+        print(f"data.list generated at {data_list_path}")
 
 if __name__ == "__main__":
     main()

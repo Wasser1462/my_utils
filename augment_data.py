@@ -36,7 +36,7 @@ def copy_dev_folder(source_dir, output_dir):
     dest_path = os.path.join(output_dir, "dev")
 
     if os.path.exists(dev_folder_path):
-        shutil.copytree(dev_folder_path, dest_path)
+        shutil.copytree(dev_folder_path, dest_path) 
     else:
         print(f"源文件夹 {dev_folder_path} 不存在")
 
