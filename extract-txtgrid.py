@@ -4,9 +4,17 @@
 
 import os
 import re
+import argparse
 
-file_path = "/data1/zengyongwang/tmp/hefei12345-wav-and-textgrid/textgrid/12315-jiaotong-shijian-3"
-out_dir = "/data1/zengyongwang/tmp/hefei123-wav-train-test/train"
+parser = argparse.ArgumentParser(description='Extract text from TextGrid files')
+parser.add_argument('file_path', type=str, help='Path to the TextGrid floder')
+parser.add_argument('out_dir', type=str, help='Path to the output directory')
+
+args = parser.parse_args()
+
+file_path = args.file_path
+out_dir = args.out_dir
+
 out_file_path = os.path.join(out_dir, "text")
 
 def extract_textgrid_content(content):

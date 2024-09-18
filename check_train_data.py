@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Check train data .')
     parser.add_argument('input_dir', help='input dir,include wav.scp,text,data.list')
-
+    
     args = parser.parse_args()
     
     wav_scp_path = os.path.join(args.input_dir, 'wav.scp')

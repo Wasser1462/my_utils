@@ -3,6 +3,7 @@
 # Description: 根据wav.scp文件，统计音频时长
 
 import logging
+import argparse
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,5 +21,11 @@ def __wavscp(wav_scp):
 
     logging.info(f"统计结果: {len(texts)}条, 总时长: {total_time:.3f}s / {total_time / 3600:.3f}h.")
 
-wav_scp_file = '/data1/zengyongwang/oupai/wav-channels/part2/wav.scp' 
+parser = argparse.ArgumentParser(description='根据wav.scp文件,统计音频时长')
+parser.add_argument('input_dir', type=str, help='wav.scp文件路径')
+
+args = parser.parse_args()
+
+wav_scp_file = args.input_dir
+
 __wavscp(wav_scp_file)

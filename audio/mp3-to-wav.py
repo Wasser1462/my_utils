@@ -4,9 +4,16 @@
 
 import os
 import subprocess
+import argparse
 
-input_folder = "/data1/zengyongwang/dataset/zhinengkefu/mp3"
-output_folder = "/data1/zengyongwang/dataset/zhinengkefu/wav"
+parser = argparse.ArgumentParser(description='Convert MP3 files to WAV format')
+parser.add_argument('input_dir', help='input dir')
+parser.add_argument('output_dir', help='output dir')
+
+args = parser.parse_args()
+
+input_folder = args.input_dir
+output_folder = args.output_dir
 
 if not os.path.exists(output_folder):
     os.makedirs(output_folder)
