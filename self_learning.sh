@@ -1,5 +1,4 @@
 #!/bin/bash
-# Created by fangcheng on 2022/12/07
 # 导出cpu推理需要的模型文件
 
 set -e
