@@ -47,7 +47,7 @@ for mode in "${decode_modes[@]}"; do
   result_dir=$dir/$mode
   mkdir -p $result_dir
 
-batch_size=1
+  batch_size=1
 
   python wenet/bin/recognize.py \
     --gpu 0 \
@@ -64,7 +64,7 @@ batch_size=1
     --reverse_weight $reverse_weight
 
   if [ ! -f $result_dir/text ]; then
-    echo "解码结果文件 $result_dir/text 未生成，解码可能失败。"
+    echo "解码结果文件 $result_dir/text 未生成，解码失败。"
     continue
   fi
 
