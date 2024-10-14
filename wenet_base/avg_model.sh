@@ -5,7 +5,7 @@
 
 average_checkpoint=true
 average_num=5
-out_dir=/data1/zengyongwang/model/asr_model_v4.6.0-hefei-0912
+out_dir=/data1/zengyongwang/model/asr_model_v4.7.0-hefei12345
 
 if [ ${average_checkpoint} == true ]; then
     decode_checkpoint=$out_dir/avg_${average_num}.pt

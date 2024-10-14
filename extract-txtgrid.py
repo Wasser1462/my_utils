@@ -15,7 +15,7 @@ args = parser.parse_args()
 file_path = args.file_path
 out_dir = args.out_dir
 
-out_file_path = os.path.join(out_dir, "text.ref")
+out_file_path = os.path.join(out_dir, "text")
 
 def extract_textgrid_content(content):
     text_lines = []
