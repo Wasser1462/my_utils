@@ -1,11 +1,13 @@
+# Author: zyw
+# Date: 2024-10-09 15:54:10
+# Description: Check if the audio file meets the input requirements for WENET.
+
 import argparse
 import logging
 import os
 import re
 
-# 解析并计算音频时长的通用函数
 def calculate_duration_from_key(utterance_id):
-    # 使用正则表达式匹配各种格式的时间信息
     time_match = re.search(r"-(\d+)-(\d+)(?:-[A-Za-z0-9]*)?$", utterance_id)
     if time_match:
         start_time_ms = time_match.group(1)
@@ -14,7 +16,7 @@ def calculate_duration_from_key(utterance_id):
             start_time = int(start_time_ms) * 0.001  # 转换为秒
             end_time = int(end_time_ms) * 0.001  # 转换为秒
             duration = end_time - start_time
-            return duration if duration > 0 else None  # 确保时长有效
+            return duration if duration > 0 else None  
         except ValueError:
             logging.warning(f"时间解析错误: {utterance_id}")
             return None
@@ -22,7 +24,6 @@ def calculate_duration_from_key(utterance_id):
         logging.warning(f"无法解析时间信息: {utterance_id}")
         return None
 
-# 检查 wav.scp 文件中的音频长度
 def check_wav_scp(wav_scp, min_length, max_length):
     with open(wav_scp, 'r', encoding="utf-8") as f:
         texts = f.readlines()
@@ -31,7 +32,7 @@ def check_wav_scp(wav_scp, min_length, max_length):
     invalid_wav = []
 
     for text in texts:
-        text_list = text.strip().split(maxsplit=1)  # 以空格分割行
+        text_list = text.strip().split(maxsplit=1) 
         if len(text_list) != 2:
             logging.warning(f"格式不正确: {text}")
             continue
@@ -41,11 +42,10 @@ def check_wav_scp(wav_scp, min_length, max_length):
         duration = calculate_duration_from_key(utterance_id)
         
         if duration is None:
-            continue  # 如果无法解析时长，跳过该条记录
+            continue 
 
         total_time += duration
 
-        # 检查音频长度是否在限制内
         if duration < min_length or duration > max_length:
             invalid_wav.append((utterance_id, duration))
 
@@ -56,7 +56,6 @@ def check_wav_scp(wav_scp, min_length, max_length):
             logging.warning(f"音频 {wav_id} 长度为 {length:.3f}s，不在范围 [{min_length}, {max_length}] 秒内.")
     return len(invalid_wav) == 0
 
-# 检查 text 文件中的文本长度
 def check_text_file(text_file, token_min_length, token_max_length):
     with open(text_file, 'r', encoding="utf-8") as f:
         texts = f.readlines()
@@ -90,7 +89,6 @@ def check_text_file(text_file, token_min_length, token_max_length):
         for text_id, length in invalid_texts:
             logging.warning(f"文本 {text_id} 长度为 {length}，不在范围 [{token_min_length}, {token_max_length}] 字符内.")
 
-    # 打印总的统计信息
     logging.info(f"总共处理文本条目: {total_texts}")
     logging.info(f"格式不正确的文本条目: {len(format_errors)}")
     logging.info(f"文本长度不符合要求的条目: {len(invalid_texts)}")
