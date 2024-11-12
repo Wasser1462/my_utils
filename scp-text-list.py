@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-11-01
+# Description: This script reads a text file and a wav.scp file, and generates a data list file that contains the keys and corresponding texts.
+
 import logging
 import argparse
 import os

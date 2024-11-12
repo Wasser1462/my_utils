@@ -20,8 +20,6 @@ decode_modes=("ctc_greedy_search" "ctc_prefix_beam_search" "attention" )
 
 ctc_weight=0.3
 reverse_weight=0.5
-batch_size=16
-num_workers=8
 average_checkpoint=true
 average_num=5 
 decode_checkpoint=$dir/avg_${average_num}.pt
