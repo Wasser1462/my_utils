@@ -7,14 +7,46 @@ import subprocess
 import argparse
 from concurrent.futures import ProcessPoolExecutor
 
+def repair_or_reencode(mp3_path, fixed_mp3_path):
+    """
+    Repair or re-encode the MP3 file to make it compatible with ffmpeg.
+    """
+    try:
+        # Try repairing the MP3 file
+        repair_command = ['ffmpeg', '-i', mp3_path, '-acodec', 'copy', fixed_mp3_path]
+        subprocess.run(repair_command, check=True)
+        print(f"Repaired: {mp3_path} -> {fixed_mp3_path}")
+        return fixed_mp3_path
+    except subprocess.CalledProcessError:
+        # If repair fails, re-encode the MP3 file
+        reencode_command = ['ffmpeg', '-i', mp3_path, '-ac', '2', '-ar', '16000', fixed_mp3_path]
+        subprocess.run(reencode_command, check=True)
+        print(f"Re-encoded: {mp3_path} -> {fixed_mp3_path}")
+        return fixed_mp3_path
+
 def convert_to_wav(mp3_path, output_folder):
+    """
+    Convert an MP3 file to WAV format.
+    """
     wav_filename = os.path.basename(mp3_path).replace(".mp3", ".wav")
     wav_path = os.path.join(output_folder, wav_filename)
     
-    command = ['ffmpeg', '-i', mp3_path, wav_path]
-    subprocess.run(command, check=True)
-    
-    print(f"Converted: {mp3_path} to {wav_path}")
+    try:
+        # Attempt to convert MP3 to WAV
+        command = ['ffmpeg', '-i', mp3_path, '-ar', '16000', '-ac', '2', wav_path]
+        subprocess.run(command, check=True)
+        print(f"Converted: {mp3_path} -> {wav_path}")
+    except subprocess.CalledProcessError:
+        # Handle conversion errors
+        print(f"Error converting {mp3_path}, attempting to repair or re-encode.")
+        fixed_mp3_path = mp3_path.replace(".mp3", "_fixed.mp3")
+        fixed_mp3_path = os.path.join(output_folder, os.path.basename(fixed_mp3_path))
+        repaired_mp3 = repair_or_reencode(mp3_path, fixed_mp3_path)
+        
+        # Retry conversion with the repaired or re-encoded file
+        retry_command = ['ffmpeg', '-i', repaired_mp3, '-ar', '16000', '-ac', '2', wav_path]
+        subprocess.run(retry_command, check=True)
+        print(f"Converted after repair/re-encode: {repaired_mp3} -> {wav_path}")
 
 def main():
     parser = argparse.ArgumentParser(description='Convert MP3 files to WAV format')
