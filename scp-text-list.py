@@ -1,6 +1,6 @@
 # Author: zyw
 # Date: 2024-11-01
-# Description: 该脚本读取文本文件和 wav.scp 文件，并生成包含键和对应文本的数据列表文件。
+# Description: This script reads a text file and a wav.scp file, and generates a data list file that contains the keys and corresponding texts.
 #usage: python /data1/zengyongwang/my_utils/scp-text-list.py /data1/zengyongwang/chifeng12345/wav-test-train/test --calculate-duration False
 
 import logging
