@@ -8,7 +8,7 @@ import random
 import re
 import logging
 from pathlib import Path
-import shutil  # 用于复制文件夹
+import shutil  
 import json
 
 def get_wav_scp_and_text(folder_path):
@@ -67,10 +67,8 @@ def load_text_as_dict(text_path):
     with open(text_path, 'r', encoding="utf-8") as f:
         for line in f:
             line = line.strip()
-            # 跳过空行
             if not line:
                 continue
-            # 检查是否有足够的值进行解包
             if len(line.split(" ", 1)) == 2:
                 utterance_id, text_content = line.split(" ", 1)
                 text_dict[utterance_id] = text_content
@@ -84,10 +82,10 @@ def match_durations_and_generate_text(wav_scp_0, wav_scp_1, total_duration_0, to
     durations_1 = statis_project_data_length_1(wav_scp_1)
     
     matched_durations = []
-    random.shuffle(durations_1)  # 随机打乱 durations_1
+    random.shuffle(durations_1) 
 
     selected_duration = 0
-    target_duration = total_duration_0  # 已经是秒，不再需要转换为小时
+    target_duration = total_duration_0  
 
     print(f"开始匹配目标时长 {target_duration / 3600:.3f} 小时 (误差范围: {tolerance_seconds / 3600:.3f} 小时)...")
 
@@ -105,27 +103,24 @@ def merge_and_shuffle(original_wav_scp, original_text, new_durations, text_dict,
     combined_wav_scp = []
     combined_text = []
 
-    # 读取原始数据并将其写入新的wav.scp和text中
     with open(original_wav_scp, 'r', encoding="utf-8") as f:
         combined_wav_scp.extend(f.readlines())
 
     with open(original_text, 'r', encoding="utf-8") as f:
         combined_text.extend(f.readlines())
 
-    # 将匹配的新数据添加到合并的wav.scp和text中
     for utterance_id, wav_path, _ in new_durations:
         combined_wav_scp.append(f"{utterance_id} {wav_path}\n")
         if utterance_id in text_dict:
             combined_text.append(f"{utterance_id} {text_dict[utterance_id]}\n")
     
-    # 随机打乱合并后的数据
     random.shuffle(combined_wav_scp)
     random.shuffle(combined_text)
 
     output_wav_scp = os.path.join(output_dir, "wav.scp")
     output_text = os.path.join(output_dir, "text")
 
-    # 将合并后的数据写入新文件
+
     with open(output_wav_scp, 'w', encoding="utf-8") as f:
         f.writelines(combined_wav_scp)
     
@@ -146,13 +141,12 @@ def generate_data_list(wav_scp, text, output_dir):
     data_list_path = os.path.join(output_dir, "data.list")
 
     with open(wav_scp, 'r', encoding="utf-8") as wav_file, open(data_list_path, 'w', encoding="utf-8") as data_list:
-        missing_count = 0  # 记录未匹配的数量
-        total_count = 0  # 记录总的条目数量
+        missing_count = 0  
+        total_count = 0  
         for line in wav_file:
             utterance_id, wav_path = line.strip().split(" ", 1)
             total_count += 1
             if utterance_id in text_dict:
-                # 使用 json.dumps 确保输出为双引号 JSON 格式，并避免中文转义
                 entry = {
                     "key": utterance_id,
                     "wav": wav_path,

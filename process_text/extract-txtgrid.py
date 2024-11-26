@@ -1,6 +1,6 @@
 # Author: zyw
 # Date: 2024-09-11
-# Description: 提取TextGrid文件中的文本内容，并保存到指定文件中
+# Description: Extract the text content from a TextGrid file and save it to a specified file.
 
 import os
 import re

@@ -1,3 +1,7 @@
+# Author: zyw
+# Date: 2024-11-26
+# Description: SenseVoice extract emotional labels and output them.
+
 import os
 import glob
 from funasr import AutoModel
