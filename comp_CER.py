@@ -450,8 +450,12 @@ if __name__ == '__main__':
                 wer = float(result['ins'] + result['sub'] +
                             result['del']) * 100.0 / result['all']
             else:
-                wer = 0.0
-            print('WER: %4.2f %%' % wer, end=' ')
+                if result['sub'] != 0 or result['ins'] != 0 or result['del'] != 0:
+                    wer = 1.0
+                else:
+                    wer = 0.0
+            
+            print('CER: %4.2f %%' % wer, end=' ')
             print('N=%d C=%d S=%d D=%d I=%d' %
                   (result['all'], result['cor'], result['sub'], result['del'],
                    result['ins']))
@@ -510,6 +514,8 @@ if __name__ == '__main__':
     print('N=%d C=%d S=%d D=%d I=%d' %
           (result['all'], result['cor'], result['sub'], result['del'],
            result['ins']))
+    correct = float(result['cor']) * 100.0 / result['all']
+    print('Correct -> %4.2f %%' % correct, end=' ')
     if not verbose:
         print()
 

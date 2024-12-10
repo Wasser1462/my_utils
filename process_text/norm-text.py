@@ -38,7 +38,7 @@ def main():
     args = parser.parse_args()
 
     wav_scp_path = os.path.join(args.input_path, "wav.scp")
-    text_file = os.path.join(args.input_path, "text")
+    text_file = os.path.join(args.input_path, "ref")
     output_file = os.path.join(args.input_path, "kaldi_text")
 
     if not os.path.exists(wav_scp_path) or not os.path.exists(text_file):
