@@ -8,7 +8,7 @@ import argparse
 import os
 import json
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def read_text(text_file, keys_set):
     text_data = {}
@@ -20,7 +20,7 @@ def read_text(text_file, keys_set):
             key, text = parts
             if key in keys_set:
                 text_data[key] = text
-                logging.debug(f"匹配到文本: {key} -> {text}")
+                #logging.debug(f"匹配到文本: {key} -> {text}")
     return text_data
 
 def generate_data_list(wav_scp_path, text_dict, output_file, time_limit_hours=None, calculate_duration=True):
@@ -83,7 +83,7 @@ def main():
             if len(parts) == 2:
                 keys_set.add(parts[0])
 
-    logging.info(f"从 wav.scp 文件中读取的 keys: {list(keys_set)[:10]} (仅显示前10个)")
+    #logging.info(f"从 wav.scp 文件中读取的 keys: {list(keys_set)[:10]} (仅显示前10个)")
 
     logging.info("开始读取 text 文件...")
     text_dict = read_text(text_path, keys_set)

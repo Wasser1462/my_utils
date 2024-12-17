@@ -26,7 +26,7 @@ def non_stream(paths, save_path, device="cpu"):
   """
     model = AutoModel(model="paraformer-zh",  vad_model="fsmn-vad",  punc_model="ct-punc")
   """
-  model = AutoModel(model="paraformer", model_revision="v2.0.4",vad_model="fsmn-vad", device=device)
+  model = AutoModel(model="paraformer", model_revision="v2.0.4", device=device)
   if not save_path.exists():
     save_path.mkdir(parents=True)
   

@@ -161,7 +161,6 @@ def main():
 
     print(f"Processing complete. Successful: {stats['successful']}, Failed: {stats['failed']}")
 
-    # 生成 data.list
     print("Generating data.list...")
 
     wav_scp_path = os.path.join(args.output_dir, "wav.scp")
