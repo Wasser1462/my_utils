@@ -9,6 +9,7 @@ from torchaudio.transforms import Resample
 import librosa
 import soundfile as sf
 from time import time
+from concurrent.futures import ThreadPoolExecutor
 
 
 def resample_by_cpu(file_path, target_sample, output_folder):
@@ -45,32 +46,36 @@ def resample_by_librosa(file_path, target_sample, output_folder):
     print(f"Processed {file_path} to {output_path}, cost: {time() - start_time:.2f}s")
 
 
-def process_directory(input_folder, output_folder, target_sample, mode):
+def process_file(file_path, output_folder, target_sample, mode):
+    if mode == 'cpu':
+        resample_by_cpu(file_path, target_sample, output_folder)
+    elif mode == 'cuda':
+        resample_use_cuda(file_path, target_sample, output_folder)
+    elif mode == 'librosa':
+        resample_by_librosa(file_path, target_sample, output_folder)
+    else:
+        print(f"Unknown mode '{mode}' for file {file_path}. Skipping...")
+
+
+def process_directory(input_folder, output_folder, target_sample, mode, num_workers):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for file_name in os.listdir(input_folder):
-        file_path = os.path.join(input_folder, file_name)
-        if os.path.isfile(file_path) and file_name.endswith(".wav"):
-            if mode == 'cpu':
-                resample_by_cpu(file_path, target_sample, output_folder)
-            elif mode == 'cuda':
-                resample_use_cuda(file_path, target_sample, output_folder)
-            elif mode == 'librosa':
-                resample_by_librosa(file_path, target_sample, output_folder)
-            else:
-                print(f"Unknown mode '{mode}' for file {file_name}. Skipping...")
+    files = [os.path.join(input_folder, file_name) for file_name in os.listdir(input_folder) if os.path.isfile(os.path.join(input_folder, file_name)) and file_name.endswith(".wav")]
+
+    with ThreadPoolExecutor(num_workers) as executor:
+        for file_path in files:
+            executor.submit(process_file, file_path, output_folder, target_sample, mode)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Resample WAV files in a directory to a target sample rate.")
-
     parser.add_argument('input_folder', type=str, help="Input folder containing WAV files")
     parser.add_argument('output_folder', type=str, help="Output folder to save the resampled WAV files")
     parser.add_argument('--target_sample', type=int, default=16000, help="Target sample rate (default: 16000)")
     parser.add_argument('--mode', type=str, choices=['cpu', 'cuda', 'librosa'], default='librosa', help="Resampling mode (default: 'librosa')")
-
+    parser.add_argument('--num_workers', type=int, default=8, help="Number of workers for parallel processing (default: 8)")
     args = parser.parse_args()
 
-    process_directory(args.input_folder, args.output_folder, args.target_sample, args.mode)
+    process_directory(args.input_folder, args.output_folder, args.target_sample, args.mode, args.num_workers)
     print("All files done!")

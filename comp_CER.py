@@ -514,7 +514,10 @@ if __name__ == '__main__':
     print('N=%d C=%d S=%d D=%d I=%d' %
           (result['all'], result['cor'], result['sub'], result['del'],
            result['ins']))
-    correct = float(result['cor']) * 100.0 / result['all']
+    if result['all'] != 0:
+        correct = float(result['cor']) * 100.0 / result['all']
+    else:
+        correct = 0.0
     print('Correct -> %4.2f %%' % correct, end=' ')
     print('N=%d C=%d ' % (result['all'], result['cor']))
     if not verbose:
