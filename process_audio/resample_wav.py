@@ -18,7 +18,7 @@ def resample_by_cpu(file_path, target_sample, output_folder):
     y, sr = torchaudio.load(file_path)
     resampler = Resample(orig_freq=sr, new_freq=target_sample)
     resample_music = resampler(y)
-    output_path = os.path.join(output_folder, f'{base_name}_{target_sample//1000}k.wav')
+    output_path = os.path.join(output_folder, f'{base_name}.wav')
     torchaudio.save(output_path, resample_music, target_sample)
     print(f"Processed {file_path} to {output_path}, cost: {time() - start_time:.2f}s")
 
@@ -31,7 +31,7 @@ def resample_use_cuda(file_path, target_sample, output_folder):
     y = y.to(device)
     resampler = Resample(orig_freq=sr, new_freq=target_sample).to(device)
     resample_music = resampler(y)
-    output_path = os.path.join(output_folder, f'{base_name}_{target_sample//1000}k.wav')
+    output_path = os.path.join(output_folder, f'{base_name}.wav')
     torchaudio.save(output_path, resample_music.to('cpu'), target_sample)
     print(f"Processed {file_path} to {output_path}, cost: {time() - start_time:.2f}s")
 
@@ -41,7 +41,7 @@ def resample_by_librosa(file_path, target_sample, output_folder):
     y, sr = librosa.load(file_path)
     base_name = os.path.basename(file_path).split('.')[0]
     y_resampled = librosa.resample(y=y, orig_sr=sr, target_sr=target_sample)
-    output_path = os.path.join(output_folder, f'{base_name}_{target_sample//1000}k.wav')
+    output_path = os.path.join(output_folder, f'{base_name}.wav')
     sf.write(output_path, data=y_resampled, samplerate=target_sample)
     print(f"Processed {file_path} to {output_path}, cost: {time() - start_time:.2f}s")
 
