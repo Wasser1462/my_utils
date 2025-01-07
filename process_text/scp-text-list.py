@@ -1,7 +1,7 @@
 # Author: zyw
 # Date: 2024-11-01
 # Description: This script reads a text file and a wav.scp file, and generates a data list file that contains the keys and corresponding texts.
-#usage: python /data1/zengyongwang/my_utils/scp-text-list.py /data1/zengyongwang/chifeng12345/wav-test-train/test --calculate-duration False
+#usage: python /data1/zengyongwang/my_utils/process_text/scp-text-list.py /data1/zengyongwang/dataset/cantonese/test --calculate-duration False
 
 import logging
 import argparse
