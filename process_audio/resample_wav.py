@@ -79,3 +79,5 @@ if __name__ == '__main__':
 
     process_directory(args.input_folder, args.output_folder, args.target_sample, args.mode, args.num_workers)
     print("All files done!")
+
+#python /data1/zengyongwang/my_utils/process_audio/resample_wav.py /data1/zengyongwang/dataset/cantonese/dev/wav /data1/zengyongwang/dataset/cantonese/dev/wav_16k

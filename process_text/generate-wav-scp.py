@@ -93,3 +93,4 @@ if __name__ == '__main__':
         raise ValueError("Invalid mode. Please choose 1 or 2.")
     
 
+# python /data1/zengyongwang/my_utils/process_text/generate-wav-scp.py /data1/zengyongwang/dataset/cantonese/test_magicdatacantonese

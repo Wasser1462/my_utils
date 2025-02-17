@@ -1,7 +1,7 @@
 # Author: zyw
 # Date: 2025-01-07
 # Description: Copy WAV files listed in wav.scp and resample them to 16kHz.
-# usage: python /data1/zengyongwang/my_utils/process_audio/extract_wav.py /data2/fangcheng1050/cantonese/data_dir/dev /data1/zengyongwang/dataset/cantonese/dev --resample
+# usage: python /data1/zengyongwang/my_utils/process_audio/extract_wav.py /data1/zengyongwang/dataset/cantonese/test_magicdatacantonese /data1/zengyongwang/dataset/cantonese/test_magicdatacantonese --resample
 
 import os
 import shutil
@@ -53,7 +53,7 @@ if __name__ == "__main__":
         raise NotADirectoryError(f"Output folder {output_folder} is not a valid directory.")
     
     wav_files = read_wav_scp(input_folder)
-    copy_text(input_folder, output_folder)
+    #copy_text(input_folder, output_folder)
 
     wav_dir = output_folder / "wav"
     copy_files(wav_files, wav_dir)

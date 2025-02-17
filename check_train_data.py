@@ -37,4 +37,5 @@ if __name__ == '__main__':
         text_lines = text_file.readlines()
         data_list_lines = data_list_file.readlines()
         check_data_consistency(wav_scp_lines, text_lines, data_list_lines)
-    logger.info('Test completed.')
+    logging.info('check done !')
+
