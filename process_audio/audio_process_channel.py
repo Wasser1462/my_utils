@@ -26,8 +26,10 @@ for filename in os.listdir(input_folder):
         output_left = os.path.join(output_folder, f"{basename}_1.wav")
         output_right = os.path.join(output_folder, f"{basename}_2.wav")
               
-        subprocess.run(['ffmpeg', '-i', input_path, '-map_channel', '0.0.0', output_left, '-map_channel', '0.0.1', output_right])
-        
+       #subprocess.run(['ffmpeg', '-i', input_path, '-map_channel', '0.0.0', output_left, '-map_channel', '0.0.1', output_right])
+        subprocess.run(['ffmpeg', '-i', input_path, '-filter_complex', 'channelsplit=channel_layout=stereo[L][R]', '-map', '[L]', output_left, '-map', '[R]', output_right])
+
+
         print(f"Processed {filename}:")
         print(f"  Left channel saved to {output_left}")
         print(f"  Right channel saved to {output_right}")
